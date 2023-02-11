@@ -67,7 +67,7 @@ contract erc20hw {
         require(_totalSupply + _value >= _totalSupply);
 
         _totalSupply = _totalSupply + _value;
-        _balances[msg.sender] = _balances[msg.sender] + _totalSupply;
+        _balances[msg.sender] = _balances[msg.sender] + _value;
         return true;
     }
 }
