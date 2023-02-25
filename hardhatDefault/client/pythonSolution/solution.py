@@ -1,20 +1,24 @@
-const Web3 = require("web3");
-const ethNetwork = 'https://goerli.infura.io/v3/d58ad49ac6be44d781b614ada33a811b';
-const web3 = new Web3(new Web3.providers.HttpProvider(ethNetwork));
+from web3 import Web3
+import web3
 
-//copied from Remix IDE
-let contract = new web3.eth.Contract([
+w3 = Web3(Web3.WebsocketProvider('wss://goerli.infura.io/ws/v3/d58ad49ac6be44d781b614ada33a811b'))
+
+address = Web3.toChecksumAddress('0x74E2Fa41f96550f070E51AE596E01157a9eF548E')
+
+contract = w3.eth.contract(
+	address=address,
+	abi=[
     {
-        "anonymous": false,
+        "anonymous": "false",
         "inputs": [
             {
-                "indexed": true,
+                "indexed": "true",
                 "internalType": "address",
                 "name": "_caller",
                 "type": "address"
             },
             {
-                "indexed": true,
+                "indexed": "true",
                 "internalType": "address",
                 "name": "_index",
                 "type": "address"
@@ -42,7 +46,7 @@ let contract = new web3.eth.Contract([
                         "type": "int256"
                     }
                 ],
-                "indexed": false,
+                "indexed": "false",
                 "internalType": "struct mapper.elem",
                 "name": "_value",
                 "type": "tuple"
@@ -52,16 +56,16 @@ let contract = new web3.eth.Contract([
         "type": "event"
     },
     {
-        "anonymous": false,
+        "anonymous": "false",
         "inputs": [
             {
-                "indexed": true,
+                "indexed": "true",
                 "internalType": "address",
                 "name": "_caller",
                 "type": "address"
             },
             {
-                "indexed": true,
+                "indexed": "true",
                 "internalType": "address",
                 "name": "_index",
                 "type": "address"
@@ -89,7 +93,7 @@ let contract = new web3.eth.Contract([
                         "type": "int256"
                     }
                 ],
-                "indexed": false,
+                "indexed": "false",
                 "internalType": "struct mapper.elem",
                 "name": "_value",
                 "type": "tuple"
@@ -197,20 +201,14 @@ let contract = new web3.eth.Contract([
         "stateMutability": "view",
         "type": "function"
     }
-], '0x74E2Fa41f96550f070E51AE596E01157a9eF548E');
+]);
 
-contract.methods.get('0xA338250363a8C267a06a4CaE482f7D0731E830Bd').call().then(console.log);
+print("Get result for set element: ", contract.functions.get('0xA338250363a8C267a06a4CaE482f7D0731E830Bd').call())
+print("Get result for unset element: ", contract.functions.get('0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f').call())
 
-function getEventsByAdress(contract, adress) {
-    contract.getPastEvents('AllEvents', 
-        {
-            filter: { '_caller': adress},
-            fromBlock: 0,
-            toBlock: 'latest'
-        },
-        async (err, events) => { console.log(events)}
-    );
-}
 
-getEventsByAdress(contract, '0xA338250363a8C267a06a4CaE482f7D0731E830Bd')
+def getAddEventsByAdress(callerAdress, contract):
+	transferEvents = contract.events.Add.createFilter(fromBlock=0, address="0x74E2Fa41f96550f070E51AE596E01157a9eF548E")
+	transferEvents.get_all_entries()
 
+print(getAddEventsByAdress('0xA338250363a8C267a06a4CaE482f7D0731E830Bd', contract))
